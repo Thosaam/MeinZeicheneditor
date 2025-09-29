@@ -5,13 +5,16 @@ import javax.swing.border.LineBorder;
 
 public class Grafikprogramm extends JFrame{
 
+    // Variablen für die Größe des Zeichenfeldes
     public static final int FELDWEITE= 800;
     public static final int FELDHOEHE= 600;
 
+    //Variablen für die drei Hauptkomponenten
     private Zeichenfeld zeichenfeld;
     private Toolbar toolbar;
     private Menubar menubar;
 
+    // Grafikprogramm vorbereiten (Frame): Titel und Größe festlegen, Hinzufügen der Komöonenten: Zeichenfeld, Toolbar und Menübar
     public Grafikprogramm(){
         super("MyPaint");
         setSize(FELDWEITE,FELDHOEHE);
@@ -38,7 +41,7 @@ public class Grafikprogramm extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                menubar.abfrageSpeichern();
+                menubar.abfrageSpeichern(true);
             }
         });
 

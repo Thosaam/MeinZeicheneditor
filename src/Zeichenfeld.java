@@ -99,13 +99,15 @@ public class Zeichenfeld extends JPanel {
 
     }
 
-    //Methoden erzeugen
+    //Methoden erzeugen:
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
     }
 
+    //Methoden für das aktuell angewählte Tool/ Werkzeug und Farbe
     public void setAktuellesTool(Tool tool) {
         aktuellesTool= tool;
     }
@@ -121,14 +123,17 @@ public class Zeichenfeld extends JPanel {
         repaint();
     }
 
+    // Mehtode um die Strichstärke zu setzen
     public void setStrichstaerke(int strichstaerke) {
         this.strichstaerke = strichstaerke;
     }
 
+    // Mehtode um den Zeichen- Coursor einzustellen
     public void setZeichnenCursor(Cursor cursor) {
         this.setCursor(cursor);
     }
 
+    // Mehtode um Änderungen des Zeichenfeldes zu erkennen (für Speicherzweck)
     public boolean getIstGeaendert() {
         return istGeaendert;
     }

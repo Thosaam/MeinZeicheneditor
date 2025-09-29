@@ -42,6 +42,7 @@ public class Menubar extends JMenuBar {
         dateiMenu.add(speichernUnter);
         add(dateiMenu);
 
+        // Action Listener für die Dateioptionen
         neu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,38 +73,36 @@ public class Menubar extends JMenuBar {
 
     }
 
-    //Methoden
-    public void abfrageSpeichern(){
-          if(panel.getIstGeaendert()== true) {
+    //Methoden:
 
-            int option = JOptionPane.showConfirmDialog(frame, "Möchten Sie die Grafik speichern?", "Speichern", JOptionPane.YES_NO_CANCEL_OPTION);
+    // Methode für die Abfrage vor dem Speichern
+    public boolean abfrageSpeichern(boolean mitSchliessen) {
+        if (panel.getIstGeaendert()) {
+            int option = JOptionPane.showConfirmDialog(frame, "Möchten Sie die Grafik speichern? ", "Speichern", JOptionPane.YES_NO_CANCEL_OPTION);
+
             if (option == JOptionPane.YES_OPTION) {
                 speichern();
-                frame.dispose();
-            } else if (option == JOptionPane.NO_OPTION) {
+                if(mitSchliessen) {
                     frame.dispose();
-            } else if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
-
-            }
-          } else{
-              frame.dispose();
-          }
-        }
-
-
-    public boolean abfrageSichern() {
-        {if(panel.getIstGeaendert()== true) {
-            int option = JOptionPane.showConfirmDialog(frame, "Möchten Sie die Grafik speichern?", "Speichern", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (option == JOptionPane.YES_OPTION) {
-                speichern();
+                }
                 return true;
-            } else if(option == JOptionPane.CANCEL_OPTION) {
+            } else if (option== JOptionPane.NO_OPTION) {
+                if (mitSchliessen) {
+                    frame.dispose();
+                }
+                return true;
+            } else {
                 return false;
-            } else {return true;
-        }}
-    }return true;
+            }
+        }else {
+                if(mitSchliessen) {
+                    frame.dispose();
+                }
+                return true;
+            }
     }
 
+    // Methode um ein neues Zeichenfeld zu erstellen
     public void neu() {
         if(panel.getIstGeaendert()) {
             int option = JOptionPane.showConfirmDialog(frame, "Möchten Sie ein neues Zeichenfeld erstellen?", "Neues Zeichenfeld", JOptionPane.YES_NO_OPTION);
@@ -120,6 +119,7 @@ public class Menubar extends JMenuBar {
         panel.setIstGeaendert(false);
     }
 
+    // Methode um die Grafik zu speichern
     private void speichern(){
         if(aktuelleDatei== null){
             speichernUnter();
@@ -134,6 +134,7 @@ public class Menubar extends JMenuBar {
         }}
     }
 
+    // Methode für Speichern Unter der Grafik
     private void speichernUnter(){
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter= new FileNameExtensionFilter("JPG-Dateien (*.jpg)", "jpg");
@@ -156,8 +157,9 @@ public class Menubar extends JMenuBar {
 
     }
 
+    //Methode um eine Grafik zu öffnen
     private void oeffnen(){
-        if (abfrageSichern()== true) {
+        if (abfrageSpeichern(false)== true) {
         JFileChooser fileChooser= new JFileChooser();
         FileNameExtensionFilter filter= new FileNameExtensionFilter("JPG-Dateien (*.jpg)", "jpg");
         fileChooser.setFileFilter(filter);
@@ -179,6 +181,7 @@ public class Menubar extends JMenuBar {
             }
         }}
 
+    //Methode um die geöffnete Grafik auf das Zeichenfeld zu skalieren
     private BufferedImage skalieren( BufferedImage img) {
         int imgWeite= img.getWidth();
         int imgHoehe= img.getHeight();
@@ -202,7 +205,6 @@ public class Menubar extends JMenuBar {
 
         return skaliert;
     }
-
     }
 
 

@@ -7,6 +7,7 @@ import java.awt.event.InputEvent;
 
 public class Toolbar extends JToolBar {
 
+    // Toolbar/ Werkzeugleiste vorbereiten: Buttons, Icons, Listener hinzufügen
     public Toolbar(Zeichenfeld panel) {
 
         // Komponenten für Toolbar erzeugen
@@ -26,35 +27,7 @@ public class Toolbar extends JToolBar {
         InputMap strichstaerkeSignal = strichstaerkeSchieber.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap strichstaerkeAktion = strichstaerkeSchieber.getActionMap();
 
-        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK), "dicker");
-        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, InputEvent.ALT_DOWN_MASK), "dicker");
-
-        strichstaerkeAktion.put("dicker", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int wert = strichstaerkeSchieber.getValue();
-                int neuerWert = Math.min(strichstaerkeSchieber.getMaximum(), wert + 1);
-                strichstaerkeSchieber.setValue(neuerWert);
-                panel.setStrichstaerke(neuerWert);
-                wertLabel.setText(neuerWert+ " px");
-            }
-        });
-
-        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK), "duenner");
-        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, InputEvent.ALT_DOWN_MASK), "duenner");
-
-        strichstaerkeAktion.put("duenner", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int wert = strichstaerkeSchieber.getValue();
-                int neuerWert = Math.max(strichstaerkeSchieber.getMinimum(), wert - 1);
-                strichstaerkeSchieber.setValue(neuerWert);
-                panel.setStrichstaerke(neuerWert);
-                wertLabel.setText(neuerWert+ " px");
-            }
-        });
-
-        //Button Gruppen erzeugen
+        //Button- Gruppen erzeugen
         ButtonGroup toolGruppe = new ButtonGroup();
         toolGruppe.add(ellipseButton);
         toolGruppe.add(linieButton);
@@ -67,7 +40,7 @@ public class Toolbar extends JToolBar {
         farbGruppe.add(rotButton);
         farbGruppe.add(gruenButton);
 
-        // Hinzufügen der einzelnen Komponenten
+        // Hinzufügen der einzelnen Komponenten in die Werkzeugleiste
         add(ellipseButton);
         add(linieButton);
         add(rechteckButton);
@@ -84,7 +57,7 @@ public class Toolbar extends JToolBar {
         add(strichstaerkeSchieber);
         add(wertLabel);
 
-        //Icons und ToolTips
+        //Icons  + Bedienbarkeit über die Tastaur + ToolTips
         ImageIcon iconEllipse = new ImageIcon("Icons/ellipse.png");
         ellipseButton.setIcon(iconEllipse);
         ellipseButton.setMnemonic('E');
@@ -129,8 +102,34 @@ public class Toolbar extends JToolBar {
         strichstaerkeSchieber.setMaximumSize(new Dimension(90, 40));
         strichstaerkeSchieber.setBorder(new TitledBorder("Strichstärke "));
 
+        // Strichstärke über die Tastatur bedienbar machen
+        strichstaerkeAktion.put("dicker", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wert = strichstaerkeSchieber.getValue();
+                int neuerWert = Math.min(strichstaerkeSchieber.getMaximum(), wert + 1);
+                strichstaerkeSchieber.setValue(neuerWert);
+                panel.setStrichstaerke(neuerWert);
+                wertLabel.setText(neuerWert+ " px");
+            }
+        });
 
-        // Action + Change Listener
+        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK), "duenner");
+        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, InputEvent.ALT_DOWN_MASK), "duenner");
+
+        strichstaerkeAktion.put("duenner", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wert = strichstaerkeSchieber.getValue();
+                int neuerWert = Math.max(strichstaerkeSchieber.getMinimum(), wert - 1);
+                strichstaerkeSchieber.setValue(neuerWert);
+                panel.setStrichstaerke(neuerWert);
+                wertLabel.setText(neuerWert+ " px");
+            }
+        });
+
+
+        // Action + Change Listener der Toolbar / Werkezugleiste
         linieButton.addActionListener(e -> {
             panel.setAktuellesTool(Zeichenfeld.Tool.LINIE);
             panel.setZeichnenCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
@@ -163,5 +162,8 @@ public class Toolbar extends JToolBar {
         strichstaerkeSchieber.addChangeListener(e -> {
             panel.setStrichstaerke(strichstaerkeSchieber.getValue());
         });
+
+        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK), "dicker");
+        strichstaerkeSignal.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, InputEvent.ALT_DOWN_MASK), "dicker");
     }
 }
