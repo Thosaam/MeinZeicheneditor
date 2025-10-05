@@ -27,6 +27,7 @@ public class Zeichenfeld extends JPanel {
         g2d.fillRect(0, 0, breite, hoehe);
         g2d.dispose();
 
+        //Listener für das Zeichnen der Formen (dient um Koordinaten zu sichern wenn Maus gedückt wird)
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -35,7 +36,7 @@ public class Zeichenfeld extends JPanel {
                 prevX = startX;
                 prevY = startY;
             }
-
+            // Listener wenn die Maus losgelassen wird (dann wird die ausgewählte Form gezeichnet)
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (aktuellesTool== Tool.LINIE) {
@@ -72,6 +73,7 @@ public class Zeichenfeld extends JPanel {
             }
         });
 
+        //Listener für das Freihandzeichnen und das Radieren
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -101,6 +103,7 @@ public class Zeichenfeld extends JPanel {
 
     //Methoden erzeugen:
 
+    // Überschriebene Methode wird immer aufgerufen sobald das Zeichenfeld neu gezeichnet/ erstellt werden muss
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -115,9 +118,12 @@ public class Zeichenfeld extends JPanel {
         aktuelleFarbe= color;
     }
 
+    // Methode um Arbeitsbereich für Neu und Speichern aufzurufen
     public BufferedImage getImage() {
         return image;
     }
+
+    // Methode um Arebitsbereich für Öffnen oder Neu zu setzten/ erstellen
     public void setImage(BufferedImage img) {
         image= img;
         repaint();

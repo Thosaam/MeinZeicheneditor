@@ -1,17 +1,21 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Menubar extends JMenuBar {
     //Variablen erzeugen
     private final JFrame frame;
     private final Zeichenfeld panel;
     private File aktuelleDatei = null;
-
+    //Menüleiste vorbereiten: Icons, Tastaturbedienung, Listener
     public Menubar(JFrame frame, Zeichenfeld panel) {
         this.frame= frame;
         this.panel= panel;
@@ -42,7 +46,7 @@ public class Menubar extends JMenuBar {
         dateiMenu.add(speichernUnter);
         add(dateiMenu);
 
-        // Action Listener für die Dateioptionen
+        // Action Listener für die Dateioperationen
         neu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -183,6 +187,9 @@ public class Menubar extends JMenuBar {
 
     //Methode um die geöffnete Grafik auf das Zeichenfeld zu skalieren
     private BufferedImage skalieren( BufferedImage img) {
+        if (img == null){
+            throw new IllegalArgumentException("Bilddatei darf nicht null sein!");
+        }
         int imgWeite= img.getWidth();
         int imgHoehe= img.getHeight();
 
@@ -192,6 +199,11 @@ public class Menubar extends JMenuBar {
         double skalierungX= (double) panelWeite/imgWeite;
         double skalierungY= (double) panelHoehe/imgHoehe;
         double skalierung= Math.min(skalierungX, skalierungY);
+
+        //Begrenzung falls der Faktor zu groß wird
+        if(skalierung> 10.0){
+            skalierung=10.0;
+        }
 
         int neueWeite= (int) (imgWeite*skalierung);
         int neueHoehe= (int) (imgHoehe* skalierung);
